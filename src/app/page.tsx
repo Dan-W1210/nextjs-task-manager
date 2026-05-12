@@ -16,6 +16,12 @@ export default function Home() {
     },
   ]);
 
+  const deleteTask = (id: string) => {
+    //filterを使って「指定されたID 以外」のタスクだけを残した新しい配列を作る
+    const updatedTasks = tasks.filter(task => task.id !== id)
+    setTasks(updatedTasks);
+  }
+
   // 新しいタスクを追加する関数に引数でtitleを受け取るように変更
   const addTask = (title: string) => {
     const newTask: Task = {
@@ -41,7 +47,8 @@ export default function Home() {
 
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
           {tasks.map((task) => (
-            <TaskCard key={task.id} task={task}/>
+            // TaskCardに削除関数を渡す
+            <TaskCard key = { task.id } task = { task } onDelete = { deleteTask } />
           ))}
         </div>
       </div>
