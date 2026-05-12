@@ -2,6 +2,7 @@
 import { useState } from 'react'; 
 import { Task } from '@/types/task';
 import TaskCard from '@/components/TaskCard';
+import TaskForm from '@/components/TaskForm';
 
 export default function Home() {
   // タスクのリストを「State」として定義。初期値はこれまでのmockTasks
@@ -15,39 +16,32 @@ export default function Home() {
     },
   ]);
 
-  // 新しいタスクを追加する関数
-  const addTask = () => {
+  // 新しいタスクを追加する関数に引数でtitleを受け取るように変更
+  const addTask = (title: string) => {
     const newTask: Task = {
       id: Date.now().toString(), // 簡易的なID生成
-      title: '新しいタスク',
+      title: title, //入力された文字を使う
       assignee: '自分',
-      dueDate: '2026-06-01',
+      dueDate: new Date().toISOString().split('T')[0],//今日を期限にする
       status: 'Todo',
     };
     
-    // 今あるタスクリストの最後に、新しいタスクを付け足す
-    setTasks([...tasks, newTask]);
+    // 新しいタスクを一番上へ表示
+    setTasks([newTask, ...tasks]);
   };
 
   return (
-    <main className="min-h-screen bg-gray-50 p-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">
-            タスク管理ダッシュボード
-          </h1>
-          {/* タスク追加ボタン */}
-          <button 
-            onClick={addTask}
-            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
-          >
-            タスクを増やす
-          </button>
-        </div>
+    <main className='min-h-screen bg-gray-50 p-8'>
+      <div className='max-w-4xl mx-auto'>
+        <h1 className='text-3xl font-bold text-gray-900 mb-8 text-center'>
+          タスク管理ダッシュボード
+        </h1>
+        {/*入力フォームを表示。addTask関数を渡す*/}
+        <TaskForm onAddTask={addTask} />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
           {tasks.map((task) => (
-            <TaskCard key={task.id} task={task} />
+            <TaskCard key={task.id} task={task}/>
           ))}
         </div>
       </div>
