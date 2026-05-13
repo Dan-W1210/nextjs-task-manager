@@ -20,7 +20,20 @@ export default function Home() {
     //filterを使って「指定されたID 以外」のタスクだけを残した新しい配列を作る
     const updatedTasks = tasks.filter(task => task.id !== id)
     setTasks(updatedTasks);
-  }
+  };
+
+const toggleTaskStatus = (id: string) => {
+    setTasks(tasks.map(task => {
+      if (task.id === id) {
+        return { 
+          ...task, 
+          status: task.status === 'Todo' ? 'Done' : 'Todo' 
+        };
+      }
+      return task;
+    }));
+  };
+
 
   // 新しいタスクを追加する関数に引数でtitleを受け取るように変更
   const addTask = (title: string) => {
@@ -48,7 +61,7 @@ export default function Home() {
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
           {tasks.map((task) => (
             // TaskCardに削除関数を渡す
-            <TaskCard key = { task.id } task = { task } onDelete = { deleteTask } />
+            <TaskCard key = { task.id } task = { task } onDelete = { deleteTask } onToggle = { toggleTaskStatus } />
           ))}
         </div>
       </div>
